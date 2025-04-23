@@ -14,12 +14,12 @@
         "URL": "https://api.memeticsresearch.com"
       },
       "healthCheckPath": "/_health",
+      "domain": "api.memeticsresearch.com",
       "regions": ["us-east-1"],
       "cpu": 0.5,
       "memory": 1024,
       "minInstances": 1,
       "maxInstances": 1,
-      "domains": ["api.memeticsresearch.com"]
     },
     {
       "name": "db",
