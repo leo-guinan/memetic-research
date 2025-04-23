@@ -1,36 +1,44 @@
 {
   "$schema": "https://app.flightcontrol.dev/schema.json",
-  "name": "brand-starter-template",
-  "services": [
+  "environments": [
     {
-      "name": "strapi",
-      "type": "app",
-      "buildCommand": "pnpm install && pnpm build",
-      "startCommand": "pnpm start",
-      "port": 1337,
-      "env": {
-        "NODE_ENV": "production",
-        "DATABASE_URL": "postgresql://${db.user}:${db.password}@${db.host}:${db.port}/${db.database}",
-        "URL": "https://api.memeticsresearch.com"
+      "id": "production",
+      "name": "Production",
+      "region": "us-east-2",
+      "source": {
+        "branch": "main"
       },
-      "healthCheckPath": "/_health",
-      "domain": "api.memeticsresearch.com",
-      "regions": ["us-east-1"],
-      "cpu": 0.5,
-      "memory": 1024,
-      "minInstances": 1,
-      "maxInstances": 1,
-    },
-    {
-      "name": "db",
-      "type": "postgres",
-      "version": "15",
-      "size": "small",
-      "regions": ["us-east-1"],
-      "backups": {
-        "enabled": true,
-        "retentionDays": 7
-      }
+      "services": [
+        {
+          "id": "strapi",
+          "name": "Strapi API",
+          "type": "fargate",
+          "cpu": 0.5,
+          "memory": 1024,
+          "domain": "api.memeticsresearch.com",
+          "minInstances": 1,
+          "maxInstances": 1,
+          "buildType": "nixpacks",
+          "env": {
+            "NODE_ENV": "production",
+            "DATABASE_URL": "${databases.main.connectionString}",
+            "URL": "https://api.memeticsresearch.com"
+          },
+          "healthCheck": {
+            "path": "/_health"
+          }
+        }
+      ],
+      "databases": [
+        {
+          "id": "main",
+          "name": "Main Database",
+          "type": "postgresql",
+          "version": "15",
+          "size": "db.t3.micro",
+          "storage": 20
+        }
+      ]
     }
   ]
 } 
