@@ -37,6 +37,7 @@
         },
         {
           "id": "db",
+          "name": "Database",
           "type": "rds",
           "engine": "postgres",
           "engineVersion": "15",
