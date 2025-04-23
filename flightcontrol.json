@@ -1,0 +1,36 @@
+{
+  "$schema": "https://app.flightcontrol.dev/schema.json",
+  "name": "brand-starter-template",
+  "services": [
+    {
+      "name": "strapi",
+      "type": "app",
+      "buildCommand": "pnpm install && pnpm build",
+      "startCommand": "pnpm start",
+      "port": 1337,
+      "env": {
+        "NODE_ENV": "production",
+        "DATABASE_URL": "postgresql://${db.user}:${db.password}@${db.host}:${db.port}/${db.database}",
+        "URL": "https://api.memeticsresearch.com"
+      },
+      "healthCheckPath": "/_health",
+      "regions": ["us-east-1"],
+      "cpu": 0.5,
+      "memory": 1024,
+      "minInstances": 1,
+      "maxInstances": 1,
+      "domains": ["api.memeticsresearch.com"]
+    },
+    {
+      "name": "db",
+      "type": "postgres",
+      "version": "15",
+      "size": "small",
+      "regions": ["us-east-1"],
+      "backups": {
+        "enabled": true,
+        "retentionDays": 7
+      }
+    }
+  ]
+} 
