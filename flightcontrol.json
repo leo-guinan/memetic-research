@@ -12,33 +12,38 @@
         {
           "id": "strapi",
           "name": "Strapi API",
-          "type": "fargate",
+          "type": "web",
+          "target": {"type": "fargate"},
+          "buildType": "nixpacks",
+          "ci": {
+            "type": "ec2"
+          },
           "cpu": 0.5,
           "memory": 1024,
-          "domain": "api.memeticsresearch.com",
           "minInstances": 1,
           "maxInstances": 1,
-          "buildType": "nixpacks",
-          "env": {
+          "buildCommand": "npm run build",
+          "startCommand": "npm run start",
+          "envVariables": {
+            "DATABASE_URL": {
+                    "fromService": {
+                        "id": "db",
+                        "value": "dbConnectionString"
+                    }
+                },
             "NODE_ENV": "production",
-            "DATABASE_URL": "${databases.main.connectionString}",
             "URL": "https://api.memeticsresearch.com"
-          },
-          "healthCheck": {
-            "path": "/_health"
           }
-        }
-      ],
-      "databases": [
+        },
         {
-          "id": "main",
-          "name": "Main Database",
-          "type": "postgresql",
-          "version": "15",
-          "size": "db.t3.micro",
+          "id": "db",
+          "type": "rds",
+          "engine": "postgres",
+          "engineVersion": "15",
+          "instanceSize": "db.t3.micro",
           "storage": 20
         }
       ]
     }
   ]
-} 
+}
